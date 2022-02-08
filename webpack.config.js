@@ -73,6 +73,10 @@ module.exports = ({ development }) => {
     module: {
       rules: [
         {
+          test: /\.html$/i,
+          loader: "html-loader",
+        },
+        {
           test: /\.[tj]s$/,
           use: 'ts-loader',
           exclude: /node_modules/,
