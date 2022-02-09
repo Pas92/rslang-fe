@@ -1,14 +1,14 @@
 interface Request {
-  resource: string | null,
-  id: string | null,
-  verb: string | null,
+  resource: string | null;
+  id: string | null;
+  verb: string | null;
 }
 
 export const Router = {
   parseRequestURL: () => {
-    const url = location.hash.slice(1).toLowerCase() || '/';
+    const url = location.hash.slice(1).toLowerCase() || "/";
 
-    const r = url.split('/');
+    const r = url.split("/");
 
     const request: Request = {
       resource: null,

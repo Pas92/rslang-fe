@@ -1,9 +1,7 @@
 {
   "root": true,
   "parser": "@typescript-eslint/parser",
-  "plugins": [
-    "@typescript-eslint"
-  ],
+  "plugins": ["@typescript-eslint"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",
@@ -12,9 +10,6 @@
   ],
   "rules": {
     "no-console": 1,
-    "indent": [
-      "error",
-      2
-    ]
+    "indent": ["error", 2]
   }
 }

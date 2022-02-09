@@ -1,5 +1,5 @@
 export const htmlToElement = function (htmlString: string): Element | null {
-  const template = document.createElement('template');
+  const template = document.createElement("template");
   template.innerHTML = htmlString;
   return template.content.firstElementChild;
-}
+};
