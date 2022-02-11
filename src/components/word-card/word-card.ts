@@ -53,4 +53,8 @@ export class WordCard {
   insert() {
     return this.DOM
   }
+
+  delete() {
+    this.DOM.remove()
+  }
 }
