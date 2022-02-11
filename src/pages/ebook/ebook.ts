@@ -32,7 +32,7 @@ const insertWords = async (ebookGroup: number) => {
   wordsArr.forEach(e => {
     ebookPage?.append(e.insert())
   })
-  console.log(words)
+  // console.log(words)
 }
 
 insertWords(group)
