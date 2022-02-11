@@ -20,14 +20,24 @@ if (cacheGroup) {
   group = 0
 }
 
-const insertWords = async (ebookGroup: number) => {
+const pageSelect: HTMLSelectElement = ebookPage?.querySelector('.ebook__page') as HTMLSelectElement;
+let page: number
+const cachePage: string | null = localStorage.getItem('page')
+if (cachePage) {
+  page = +cachePage;
+  pageSelect.value = `${page}`
+} else {
+  page = 0
+}
+
+const insertWords = async (ebookGroup: number, groupPage: number) => {
   if (wordsArr.length) {
     wordsArr.forEach(e => {
       e.delete()
     })
   }
 
-  const words = await getWords(ebookGroup,1);
+  const words = await getWords(ebookGroup, groupPage);
   wordsArr = words.map((e: Word) => new WordCard(e))
   wordsArr.forEach(e => {
     ebookPage?.append(e.insert())
@@ -35,9 +45,14 @@ const insertWords = async (ebookGroup: number) => {
   // console.log(words)
 }
 
-insertWords(group)
+insertWords(group, page)
 
 groupSelect?.addEventListener('change',async () => {
   localStorage.setItem('group', groupSelect.value)
-  await insertWords(+groupSelect.value)
+  await insertWords(+groupSelect.value, +pageSelect.value)
+})
+
+pageSelect?.addEventListener('change', async () => {
+  localStorage.setItem('page', pageSelect.value)
+  await insertWords(+groupSelect.value, +pageSelect.value)
 })

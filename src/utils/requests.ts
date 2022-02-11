@@ -1,7 +1,7 @@
 export const baseURL = "https://rslang-pas92.herokuapp.com/";
 
 export const getWords = async (group:number, page:number) => {
-  const res = await fetch(`${baseURL}words?group=${group}&number=${page}`, {
+  const res = await fetch(`${baseURL}words?group=${group}&page=${page}`, {
     method: 'GET',
     headers: {
       'Accept': 'application/json',
