@@ -49,3 +49,9 @@ export type Auth = {
   userId: string;
   name: string;
 };
+
+export type UserReg = {
+  name: string
+  email: string
+  password: string
+}

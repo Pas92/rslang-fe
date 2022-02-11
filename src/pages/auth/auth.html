@@ -1,1 +1,32 @@
-<h2 class="page">Вход/пользователь</h2>
+<section class="page auth-page">
+  <h2 class="page">Вход/регистрация</h2>
+  <form action="" class="auth__form">
+    <fieldset class="auth__type">
+      <label>
+        <input type="radio" name="auth-type" id="auth-type-sign-in" checked>
+        Вход
+      </label>
+      <label>
+        <input type="radio" name="auth-type" id="auth-type-reg">
+        Регистрация
+      </label>
+    </fieldset>
+
+    <fieldset class="auth__data">
+      <label>
+        Имя
+        <input type="text" name="auth__name" id="auth__name" class="auth__name-input" required>
+      </label>
+      <label>
+        E-mail
+        <input type="email" name="auth__email" id="auth__email" required>
+      </label>
+      <label>
+        Пароль
+        <input type="password" name="auth__password" id="auth__password" required>
+      </label>
+    </fieldset>
+
+    <button type="button" class="form__button form__button_auth">Вход</button>
+  </form>
+</section>
