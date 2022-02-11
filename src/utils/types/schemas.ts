@@ -36,11 +36,6 @@ export type Setting = {
 
 export type SettingCustomData = Record<string, unknown>;
 
-export type User = {
-  name: string;
-  email: string;
-  password: string;
-};
 
 export type Auth = {
   message: string;
@@ -49,6 +44,11 @@ export type Auth = {
   userId: string;
   name: string;
 };
+
+export type UserSingIn = {
+  email: string
+  password: string
+}
 
 export type UserReg = {
   name: string

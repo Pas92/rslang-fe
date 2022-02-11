@@ -1,4 +1,4 @@
-import { UserReg } from "./types/schemas";
+import { UserReg, UserSingIn, Auth } from "./types/schemas";
 
 export const baseURL = "https://rslang-pas92.herokuapp.com/";
 
@@ -24,11 +24,26 @@ export const createUser = async (user: UserReg): Promise<string> => {
     body: JSON.stringify(user)
   });
 
-  if (rawResponse.ok) {
-    return `OK`
-  }
-
   return `${rawResponse.status}`
   // const content = await rawResponse.json();
   // console.log(content);
+};
+
+
+export const loginUser = async (user: UserSingIn) => {
+  const rawResponse = await fetch(`${baseURL}signin`, {
+    method: 'POST',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(user)
+  });
+
+  if (rawResponse.status === 200) {
+    const content: Auth = await rawResponse.json();
+    return content
+  } else {
+    return rawResponse.status
+  }
 };

@@ -1,5 +1,7 @@
 import { htmlToElement } from "../../utils/htmlToElement";
-import { createUser } from "../../utils/requests";
+import { createUser, loginUser } from "../../utils/requests";
+
+import { Auth } from "../../utils/types/schemas";
 
 import HTML from "./auth.html";
 import "./auth.scss";
@@ -21,10 +23,27 @@ const regUser = async () => {
     password: userPassword.value
   })
 
-  if (resStatus === `OK`) {
+  if (resStatus === `200`) {
     console.log(`Зарегистрирован`)
   } else {
     console.log(`${resStatus}`)
+  }
+}
+
+const signIn = async () => {
+  const res: number | Auth = await loginUser({
+    email: userEmail.value,
+    password: userPassword.value
+  });
+
+  if (typeof res === 'number') {
+    console.log(`Error ${res}`)
+  } else {
+    localStorage.setItem('token', res.token)
+    localStorage.setItem('refreshToken', res.refreshToken)
+    localStorage.setItem('userID', res.userId)
+    localStorage.setItem('userName', res.name)
+    console.log(res)
   }
 }
 
@@ -34,6 +53,7 @@ const changeFormType = () => {
     console.log(`Вход`)
     authButton.textContent = `Вход`
 
+    authButton.addEventListener('click', signIn)
     authButton.removeEventListener('click', regUser)
   }
 
@@ -43,6 +63,7 @@ const changeFormType = () => {
     authButton.textContent = `Регистрация`
 
     authButton.addEventListener('click', regUser)
+    authButton.removeEventListener('click', signIn)
   }
 }
 
