@@ -1,0 +1,18 @@
+.word {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-content: flex-start;
+
+  
+  max-height: 200px;
+  margin-bottom: 16px;
+
+  .word__img {
+    width: 300px;
+    height: auto;
+    margin-right: 16px;
+  }
+
+}
