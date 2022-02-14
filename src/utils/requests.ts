@@ -47,3 +47,30 @@ export const loginUser = async (user: UserSingIn) => {
     return rawResponse.status
   }
 };
+
+
+export const changeWordStatus = async (wordID: string, wordDifficulty: string) => {
+  const userID = localStorage.getItem('userID')
+  const token = localStorage.getItem('token')
+
+  const rawResponse = await fetch(`${baseURL}users/${userID}/words/${wordID}`, {
+    method: 'POST',
+    
+    headers: {
+      'Authorization': `Bearer ${token}`,
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      difficulty: wordDifficulty,
+      optional: {}
+    })
+  });
+
+  if (rawResponse.status === 200) {
+    const content = await rawResponse.json();
+    return content
+  } else {
+    return rawResponse.status
+  }
+};

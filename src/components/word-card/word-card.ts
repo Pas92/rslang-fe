@@ -1,7 +1,7 @@
 import { htmlToElement } from "../../utils/htmlToElement";
 import { Word } from "../../utils/types/schemas";
 
-import { baseURL } from "../../utils/requests";
+import { baseURL, changeWordStatus } from "../../utils/requests";
 
 import HTML from './word-card.html';
 import './word-card.scss'
@@ -69,12 +69,19 @@ export class WordCard {
     userButtons.append(hardWordButton)
     userButtons.append(studiedWordButton)
 
+    hardWordButton.addEventListener('click', this.addHardWord)
+
     this.DOM.append(userButtons)
   }
 
   private deleteButtons = () => {
     const userButtons = this.DOM.querySelector('.word__buttons')
     userButtons?.remove()
+  }
+
+  private addHardWord = async () => {
+    await changeWordStatus(this.wordData.id, `hard`)
+    this.DOM.classList.add('difficult')
   }
 
   insert() {
