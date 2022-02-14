@@ -47,7 +47,34 @@ export class WordCard {
       this.imgDOM.src = `${baseURL}${this.wordData.image}`
     }
 
-    console.log(this)
+    if(localStorage.getItem('token')) {
+      this.insertButtons()
+    }
+
+    // console.log(this)
+    document.addEventListener('signin', this.insertButtons)
+    document.addEventListener('logout', this.deleteButtons)
+  }
+
+  private insertButtons = () => {
+    const userButtons = document.createElement('fieldset')
+    const hardWordButton = document.createElement('button')
+    const studiedWordButton = document.createElement('button')
+
+    userButtons.classList.add('word__buttons')
+
+    hardWordButton.textContent = 'Добавить в сложные слова'
+    studiedWordButton.textContent = 'Пометить как изученное'
+    
+    userButtons.append(hardWordButton)
+    userButtons.append(studiedWordButton)
+
+    this.DOM.append(userButtons)
+  }
+
+  private deleteButtons = () => {
+    const userButtons = this.DOM.querySelector('.word__buttons')
+    userButtons?.remove()
   }
 
   insert() {

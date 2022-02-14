@@ -39,6 +39,9 @@ const signIn = async () => {
   if (typeof res === 'number') {
     console.log(`Error ${res}`)
   } else {
+    const signInEvent = new Event('signin');
+    document.dispatchEvent(signInEvent);
+
     localStorage.setItem('token', res.token)
     localStorage.setItem('refreshToken', res.refreshToken)
     localStorage.setItem('userID', res.userId)
