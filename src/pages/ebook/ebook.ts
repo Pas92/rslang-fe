@@ -1,5 +1,5 @@
 import { htmlToElement } from "../../utils/htmlToElement";
-import { getWords } from "../../utils/requests";
+import { getWords, getDifficultWords } from "../../utils/requests";
 
 import { Word } from "../../utils/types/schemas";
 import { WordCard } from "../../components/word-card/word-card";
@@ -9,6 +9,8 @@ import "./ebook.scss";
 
 export const ebookPage = htmlToElement(HTML);
 let wordsArr: WordCard[] = [];
+
+const ebookControls = ebookPage?.querySelector('.ebook__form')
 
 const groupSelect: HTMLSelectElement = ebookPage?.querySelector('.ebook__group') as HTMLSelectElement;
 let group: number
@@ -30,29 +32,80 @@ if (cachePage) {
   page = 0
 }
 
-const insertWords = async (ebookGroup: number, groupPage: number) => {
+const getWordCards = async (ebookGroup: number, groupPage: number) => {
+  const words = await getWords(ebookGroup, groupPage);
+  wordsArr = words.map((e: Word) => new WordCard(e))
+  wordsArr.forEach(e => {
+    ebookPage?.append(e.insert())
+  })
+}
+
+const insertWords = async () => {
+  if (wordsArr.length) {
+    wordsArr.forEach(e => {
+      e.delete()
+    })
+  }
+  const cacheGroup: string | null = localStorage.getItem('group')
+  if (cacheGroup) {
+    group = +cacheGroup;
+  } 
+
+  console.log(group, page)
+
+  getWordCards(+group, +page)
+  // console.log(words)
+}
+
+insertWords()
+
+groupSelect?.addEventListener('change',async () => {
+  localStorage.setItem('group', groupSelect.value)
+  insertWords()
+})
+
+pageSelect?.addEventListener('change', async () => {
+  localStorage.setItem('page', pageSelect.value)
+  insertWords()
+})
+
+const insertHardWords = async (ev: Event) => {
   if (wordsArr.length) {
     wordsArr.forEach(e => {
       e.delete()
     })
   }
 
-  const words = await getWords(ebookGroup, groupPage);
-  wordsArr = words.map((e: Word) => new WordCard(e))
-  wordsArr.forEach(e => {
-    ebookPage?.append(e.insert())
-  })
-  // console.log(words)
+  if (ebookControls?.classList.contains('ebook_difficult')) {
+    ebookControls.classList.remove('ebook_difficult');
+    (ev.target as HTMLButtonElement).textContent = 'Cложные слова'
+    getWordCards(group, page)
+  } else {
+    ebookControls?.classList.add('ebook_difficult');
+    (ev.target as HTMLButtonElement).textContent = 'Вернуться к учебнику'
+    const words = await getDifficultWords();
+    wordsArr = words.map((e: Word) => new WordCard(e))
+    wordsArr.forEach(e => {
+      ebookPage?.append(e.insert())
+    })
+  }
 }
 
-insertWords(group, page)
+const insertHardWordsButton = () => {
+  const hardWordsButton = document.createElement('button')
+  hardWordsButton.type = 'button'
+  hardWordsButton.classList.add('ebook__difficult-words')
+  hardWordsButton.textContent = 'Сложные слова'
+  hardWordsButton.addEventListener('click', insertHardWords)
+  ebookControls?.append(hardWordsButton)
+}
 
-groupSelect?.addEventListener('change',async () => {
-  localStorage.setItem('group', groupSelect.value)
-  await insertWords(+groupSelect.value, +pageSelect.value)
-})
+if (localStorage.getItem('token')) {
+  insertHardWordsButton()
+}
 
-pageSelect?.addEventListener('change', async () => {
-  localStorage.setItem('page', pageSelect.value)
-  await insertWords(+groupSelect.value, +pageSelect.value)
+document.addEventListener('signin', insertHardWordsButton)
+document.addEventListener('logout', () => {
+  const hardWordsButton = ebookControls?.querySelector('.ebook__difficult-words')
+  hardWordsButton?.remove()
 })

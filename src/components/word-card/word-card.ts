@@ -14,10 +14,15 @@ export class WordCard {
   wordMeaningEngContainer: HTMLSpanElement | null
   wordMeaningRuContainer: HTMLSpanElement | null
   imgDOM: HTMLImageElement | null
+  isDifficult: boolean
+  isTrusted: boolean
+
   constructor(word: Word) {
     //Data
     this.wordData = word;
     this.DOM = htmlToElement(HTML) as HTMLElement;
+    this.isDifficult = false
+    this.isTrusted = false
 
     // Word
     this.wordEngContainer = this.DOM.querySelector('.word__description_eng .word__english');
@@ -51,6 +56,12 @@ export class WordCard {
       this.insertButtons()
     }
 
+    //Styles for Difficult Word
+    if(this.wordData.userWord?.difficulty === 'hard') {
+      this.isDifficult = true
+      this.DOM.classList.add('difficult')
+    }
+
     // console.log(this)
     document.addEventListener('signin', this.insertButtons)
     document.addEventListener('logout', this.deleteButtons)
@@ -63,13 +74,21 @@ export class WordCard {
 
     userButtons.classList.add('word__buttons')
 
-    hardWordButton.textContent = 'Добавить в сложные слова'
+    hardWordButton.type = 'button'
+    studiedWordButton.type = 'button'
+
+    if (this.wordData.userWord?.difficulty === 'hard') {
+      hardWordButton.textContent = 'Удалить из сложных слов'
+    } else {
+      hardWordButton.textContent = 'Добавить в сложные слова'
+    }
+    
     studiedWordButton.textContent = 'Пометить как изученное'
     
     userButtons.append(hardWordButton)
     userButtons.append(studiedWordButton)
 
-    hardWordButton.addEventListener('click', this.addHardWord)
+    hardWordButton.addEventListener('click', this.addOrDeleteHardWord)
 
     this.DOM.append(userButtons)
   }
@@ -79,9 +98,17 @@ export class WordCard {
     userButtons?.remove()
   }
 
-  private addHardWord = async () => {
-    await changeWordStatus(this.wordData.id, `hard`)
-    this.DOM.classList.add('difficult')
+  private addOrDeleteHardWord = async (ev: Event) => {
+    if(!this.isDifficult) {
+      this.isDifficult = true
+      console.log(this.wordData)
+      changeWordStatus(this.wordData._id, `hard`)
+      this.DOM.classList.add('difficult');
+      (ev.target as HTMLButtonElement).textContent = 'Удалить из сложных слов'
+    } else {
+      console.log(`TODO - delete from difficult words`)
+    }
+    
   }
 
   insert() {

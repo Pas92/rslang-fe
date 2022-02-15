@@ -1,5 +1,10 @@
+export type UserWord = {
+  difficulty: string;
+  optional: UserWordCustomData;
+};
+
 export type Word = {
-  id: string;
+  _id: string;
   group: number;
   page: number;
   word: string;
@@ -13,13 +18,10 @@ export type Word = {
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
-  userword?: Record<string, unknown>
+  userWord?: UserWord
 };
 
-export type UserWord = {
-  difficulty: string;
-  optional: UserWordCustomData;
-};
+
 
 export type UserWordCustomData = Record<string, unknown>;
 

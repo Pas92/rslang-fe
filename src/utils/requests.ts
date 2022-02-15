@@ -30,7 +30,26 @@ export const getWords = async (group:number, page:number) => {
 
     return data
   }
-  
+}
+
+export const getDifficultWords = async () => {
+  let res: Response
+  if (localStorage.getItem('token')) {
+    const userID = localStorage.getItem('userID')
+    const token = localStorage.getItem('token')
+
+    res = await fetch(`${baseURL}users/${userID}/aggregatedWords?wordsPerPage=3600&filter={"$and":[{"userWord.difficulty":"hard"}]}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+      }
+    })
+    const data = await res.json()
+    console.log(data[0].paginatedResults)
+
+    return data[0].paginatedResults
+  }
 }
 
 export const createUser = async (user: UserReg): Promise<string> => {
