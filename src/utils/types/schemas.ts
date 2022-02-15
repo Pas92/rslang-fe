@@ -13,6 +13,7 @@ export type Word = {
   wordTranslate: string;
   textMeaningTranslate: string;
   textExampleTranslate: string;
+  userword?: Record<string, unknown>
 };
 
 export type UserWord = {

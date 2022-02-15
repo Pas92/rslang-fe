@@ -1,17 +1,36 @@
-import { UserReg, UserSingIn, Auth } from "./types/schemas";
+import { UserReg, UserSingIn, Auth, } from "./types/schemas";
 
 export const baseURL = "https://rslang-pas92.herokuapp.com/";
 
 export const getWords = async (group:number, page:number) => {
-  const res = await fetch(`${baseURL}words?group=${group}&page=${page}`, {
-    method: 'GET',
-    headers: {
-      'Accept': 'application/json',
-    }
-  })
-  const data = res.json()
+  let res: Response
+  if (localStorage.getItem('token')) {
+    const userID = localStorage.getItem('userID')
+    const token = localStorage.getItem('token')
 
-  return data
+    res = await fetch(`${baseURL}users/${userID}/aggregatedWords?wordsPerPage=20&filter={"$and":[{"page":${page}, "group":${group}}]}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+      }
+    })
+    const data = await res.json()
+    console.log(data[0].paginatedResults)
+
+    return data[0].paginatedResults
+  } else {
+    res = await fetch(`${baseURL}words?group=${group}&page=${page}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      }
+    })
+    const data = res.json()
+
+    return data
+  }
+  
 }
 
 export const createUser = async (user: UserReg): Promise<string> => {
