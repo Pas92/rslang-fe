@@ -9,6 +9,10 @@ import './word-card.scss'
 export class WordCard {
   wordData: Word
   DOM: HTMLElement
+  audioButton: HTMLButtonElement
+  audioWord: HTMLAudioElement
+  audioMeaning: HTMLAudioElement
+  audioExample: HTMLAudioElement
   wordEngContainer: HTMLHeadingElement | null
   wordRuContainer: HTMLParagraphElement | null
   wordMeaningEngContainer: HTMLSpanElement | null
@@ -51,6 +55,28 @@ export class WordCard {
     if (this.imgDOM) {
       this.imgDOM.src = `${baseURL}${this.wordData.image}`
     }
+
+    //Audio
+    this.audioButton = this.DOM.querySelector('.word__audio') as HTMLButtonElement
+    this.audioWord = new Audio(`${baseURL}${this.wordData.audio}`)
+    this.audioMeaning = new Audio(`${baseURL}${this.wordData.audioMeaning}`)
+    this.audioExample = new Audio(`${baseURL}${this.wordData.audioExample}`)
+
+    this.audioButton.addEventListener('click', () => {
+      console.log(this.wordEngContainer)
+      this.wordEngContainer?.classList.add('played')
+      this.audioWord.play()
+    })
+
+    this.audioWord.addEventListener('ended', () => {
+      this.wordEngContainer?.classList.remove('played')
+      this.wordMeaningEngContainer?.classList.add('played')
+      this.audioMeaning.play()
+    })
+
+    this.audioMeaning.addEventListener('ended', () => {
+      this.wordMeaningEngContainer?.classList.remove('played')
+    })
 
     if(localStorage.getItem('token')) {
       this.insertButtons()
