@@ -46,12 +46,18 @@ const insertWords = async () => {
       e.delete()
     })
   }
+
   const cacheGroup: string | null = localStorage.getItem('group')
   if (cacheGroup) {
     group = +cacheGroup;
-  } 
+  }
 
-  console.log(group, page)
+  const cachePage: string | null = localStorage.getItem('page')
+  if (cachePage) {
+    page = +cachePage;
+  }
+
+
 
   getWordCards(+group, +page)
   // console.log(words)
@@ -78,9 +84,11 @@ const insertHardWords = async (ev: Event) => {
 
   if (ebookControls?.classList.contains('ebook_difficult')) {
     ebookControls.classList.remove('ebook_difficult');
+    ebookPage?.classList.add('ebook_difficult');
     (ev.target as HTMLButtonElement).textContent = 'Cложные слова'
     getWordCards(group, page)
   } else {
+    ebookPage?.classList.add('ebook_difficult');
     ebookControls?.classList.add('ebook_difficult');
     (ev.target as HTMLButtonElement).textContent = 'Вернуться к учебнику'
     const words = await getDifficultWords();
