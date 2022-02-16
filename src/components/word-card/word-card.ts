@@ -106,9 +106,16 @@ export class WordCard {
       this.DOM.classList.add('difficult');
       (ev.target as HTMLButtonElement).textContent = 'Удалить из сложных слов'
     } else {
-      console.log(`TODO - delete from difficult words`)
+      this.isDifficult = true
+      console.log(this.wordData)
+      changeWordStatus(this.wordData._id, `normal`)
+      this.DOM.classList.remove('difficult');
+      (ev.target as HTMLButtonElement).textContent = 'Добавить в сложные слова'
+      if (this.DOM.parentElement?.classList.contains('ebook_difficult')) {
+        this.delete()
+      }
+      // console.log(`TODO - delete from difficult words`)
     }
-    
   }
 
   insert() {

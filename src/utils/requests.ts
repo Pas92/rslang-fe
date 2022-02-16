@@ -92,8 +92,7 @@ export const changeWordStatus = async (wordID: string, wordDifficulty: string) =
   const token = localStorage.getItem('token')
 
   const rawResponse = await fetch(`${baseURL}users/${userID}/words/${wordID}`, {
-    method: 'POST',
-    
+    method: 'PUT',
     headers: {
       'Authorization': `Bearer ${token}`,
       'Accept': 'application/json',
@@ -108,6 +107,26 @@ export const changeWordStatus = async (wordID: string, wordDifficulty: string) =
   if (rawResponse.status === 200) {
     const content = await rawResponse.json();
     return content
+  } else if (rawResponse.status === 404){
+    const rawResponse = await fetch(`${baseURL}users/${userID}/words/${wordID}`, {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        difficulty: wordDifficulty,
+        optional: {}
+      })
+    });
+
+    if (rawResponse.status === 200) {
+      const content = await rawResponse.json();
+      return content
+    } else {
+      return rawResponse.status
+    }
   } else {
     return rawResponse.status
   }
