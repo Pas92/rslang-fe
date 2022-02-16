@@ -17,6 +17,8 @@ export class WordCard {
   wordRuContainer: HTMLParagraphElement | null
   wordMeaningEngContainer: HTMLSpanElement | null
   wordMeaningRuContainer: HTMLSpanElement | null
+  wordExampleEngContainer: HTMLSpanElement | null
+  wordExampleRuContainer: HTMLSpanElement | null
   imgDOM: HTMLImageElement | null
   isDifficult: boolean
   isStudied: boolean
@@ -50,6 +52,17 @@ export class WordCard {
       this.wordMeaningRuContainer.innerHTML = `${this.wordData.textMeaningTranslate}`
     }
 
+    //Example
+    this.wordExampleEngContainer = this.DOM.querySelector('.word__description_eng .word__example');
+    if (this.wordExampleEngContainer) {
+      this.wordExampleEngContainer.innerHTML = `${this.wordData.textExample}`
+    }
+
+    this.wordExampleRuContainer = this.DOM.querySelector('.word__description_ru .word__example');
+    if (this.wordExampleRuContainer) {
+      this.wordExampleRuContainer.innerHTML = `${this.wordData.textExampleTranslate}`
+    }
+
     // Image
     this.imgDOM = this.DOM.querySelector('.word__img');
     if (this.imgDOM) {
@@ -76,6 +89,12 @@ export class WordCard {
 
     this.audioMeaning.addEventListener('ended', () => {
       this.wordMeaningEngContainer?.classList.remove('played')
+      this.wordExampleEngContainer?.classList.add('played')
+      this.audioExample.play()
+    })
+
+    this.audioExample.addEventListener('ended', () => {
+      this.wordExampleEngContainer?.classList.remove('played')
     })
 
     if(localStorage.getItem('token')) {
