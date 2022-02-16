@@ -15,14 +15,14 @@ export class WordCard {
   wordMeaningRuContainer: HTMLSpanElement | null
   imgDOM: HTMLImageElement | null
   isDifficult: boolean
-  isTrusted: boolean
+  isStudied: boolean
 
   constructor(word: Word) {
     //Data
     this.wordData = word;
     this.DOM = htmlToElement(HTML) as HTMLElement;
     this.isDifficult = false
-    this.isTrusted = false
+    this.isStudied = false
 
     // Word
     this.wordEngContainer = this.DOM.querySelector('.word__description_eng .word__english');
@@ -62,6 +62,11 @@ export class WordCard {
       this.DOM.classList.add('difficult')
     }
 
+    if (this.wordData.userWord?.difficulty === 'studied') {
+      this.isStudied = true
+      this.DOM.classList.add('studied')
+    }
+
     // console.log(this)
     document.addEventListener('signin', this.insertButtons)
     document.addEventListener('logout', this.deleteButtons)
@@ -73,6 +78,8 @@ export class WordCard {
     const studiedWordButton = document.createElement('button')
 
     userButtons.classList.add('word__buttons')
+    hardWordButton.classList.add('word__hard-button')
+    studiedWordButton.classList.add('word__studied-button')
 
     hardWordButton.type = 'button'
     studiedWordButton.type = 'button'
@@ -82,13 +89,18 @@ export class WordCard {
     } else {
       hardWordButton.textContent = 'Добавить в сложные слова'
     }
-    
-    studiedWordButton.textContent = 'Пометить как изученное'
+
+    if (this.wordData.userWord?.difficulty === 'studied') {
+      studiedWordButton.textContent = 'Пометить как неизученное'
+    } else {
+      studiedWordButton.textContent = 'Пометить как изученное'
+    }
     
     userButtons.append(hardWordButton)
     userButtons.append(studiedWordButton)
 
     hardWordButton.addEventListener('click', this.addOrDeleteHardWord)
+    studiedWordButton.addEventListener('click', this.addOrDeleteStudiedWord)
 
     this.DOM.append(userButtons)
   }
@@ -101,16 +113,44 @@ export class WordCard {
   private addOrDeleteHardWord = async (ev: Event) => {
     if(!this.isDifficult) {
       this.isDifficult = true
-      console.log(this.wordData)
+      this.isStudied = false
       changeWordStatus(this.wordData._id, `hard`)
       this.DOM.classList.add('difficult');
+      this.DOM.classList.remove('studied');
       (ev.target as HTMLButtonElement).textContent = 'Удалить из сложных слов'
+
+      const hardButton = this.DOM.querySelector('.word__studied-button') as HTMLButtonElement;
+      hardButton.textContent = 'Пометить как изученное';
     } else {
-      this.isDifficult = true
-      console.log(this.wordData)
+      this.isDifficult = false
       changeWordStatus(this.wordData._id, `normal`)
       this.DOM.classList.remove('difficult');
       (ev.target as HTMLButtonElement).textContent = 'Добавить в сложные слова'
+      if (this.DOM.parentElement?.classList.contains('ebook_difficult')) {
+        this.delete()
+      }
+      // console.log(`TODO - delete from difficult words`)
+    }
+  }
+
+  private addOrDeleteStudiedWord = async (ev: Event) => {
+    if (!this.isStudied) {
+      this.isStudied = true
+      this.isDifficult = false
+      console.log(this.wordData)
+      changeWordStatus(this.wordData._id, `studied`)
+      this.DOM.classList.add('studied');
+      this.DOM.classList.remove('difficult');
+      (ev.target as HTMLButtonElement).textContent = 'Пометить как неизученное'
+
+      const hardButton = this.DOM.querySelector('.word__hard-button') as HTMLButtonElement;
+      hardButton.textContent = 'Добавить в сложные слова';
+    } else {
+      this.isStudied = false
+      changeWordStatus(this.wordData._id, `normal`)
+      console.log(this.wordData)
+      this.DOM.classList.remove('studied');
+      (ev.target as HTMLButtonElement).textContent = 'Пометить как изученное';
       if (this.DOM.parentElement?.classList.contains('ebook_difficult')) {
         this.delete()
       }
