@@ -32,6 +32,36 @@ export const getWords = async (group:number, page:number) => {
   }
 }
 
+export const getWordsForGame = async (group: number) => {
+  let res: Response
+  if (localStorage.getItem('token')) {
+    const userID = localStorage.getItem('userID')
+    const token = localStorage.getItem('token')
+
+    res = await fetch(`${baseURL}users/${userID}/aggregatedWords?wordsPerPage=600&filter={"$and":[{"group":${group}}]}`, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${token}`,
+        'Accept': 'application/json',
+      }
+    })
+    const data = await res.json()
+    console.log(data[0].paginatedResults)
+
+    return data[0].paginatedResults
+  } else {
+    res = await fetch(`${baseURL}words?group=${group}&page=${Math.floor(Math.random()*30)}`, {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+      }
+    })
+    const data = res.json()
+
+    return data
+  }
+}
+
 export const getDifficultWords = async () => {
   let res: Response
   if (localStorage.getItem('token')) {
