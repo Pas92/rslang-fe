@@ -23,6 +23,14 @@ if (cacheGroup) {
 }
 
 const pageSelect: HTMLSelectElement = ebookPage?.querySelector('.ebook__page') as HTMLSelectElement;
+const pages = 30
+for(let i = 0; i < pages; i += 1) {
+  const option: HTMLOptionElement = document.createElement('option')
+  option.value = `${i}`
+  option.textContent = `Страница ${i + 1}`
+  pageSelect.append(option)
+}
+
 let page: number
 const cachePage: string | null = localStorage.getItem('page')
 if (cachePage) {
