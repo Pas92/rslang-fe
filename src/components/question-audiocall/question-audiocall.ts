@@ -85,6 +85,7 @@ export class AudioCallQuestion {
   }
 
   insert() {
+    this.playAudio()
     return this.DOM
   }
 

@@ -16,14 +16,15 @@ let wordsForGame: Word[] | []
 
 gameCategories?.addEventListener('click', async (ev) => {
   const evTarget: HTMLElement | HTMLButtonElement | null = ev.target as HTMLElement | HTMLButtonElement | null
-  if (evTarget instanceof HTMLButtonElement) {
-    wordsForGame = await getWordsForGame(+evTarget.value)
+  if (evTarget?.classList.contains('audiocall__group')) {
+    wordsForGame = await getWordsForGame(+(evTarget as HTMLButtonElement).value)
+
+    gameCategories.classList.add('hidden')
+    const game = new AudioCallGame(wordsForGame, gameContainer)
+    game.start()
+    document.addEventListener('audiocall-game-over', () => {
+      gameCategories.classList.remove('hidden')
+    })
   }
 
-  gameCategories.classList.add('hidden')
-  const game = new AudioCallGame(wordsForGame, gameContainer)
-  game.start()
-  document.addEventListener('audiocall-game-over', () => {
-    gameCategories.classList.remove('hidden')
-  })
 })
