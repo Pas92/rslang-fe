@@ -13,11 +13,23 @@ export class AudioCallQuestion {
   answerPosition: number
   audio: HTMLAudioElement
   audioButton: HTMLButtonElement
+  image: HTMLImageElement | null
+  text: HTMLElement | null
+  answerContainer: HTMLElement | null
+  isCorrect: boolean
   constructor(word: Word, answers: string[]) {
     this.wordData = word
     this.DOM = htmlToElement(HTML) as HTMLElement
+    this.isCorrect = false
 
     this.audio = new Audio(`${baseURL}${this.wordData.audio}`)
+
+    this.answerContainer = this.DOM.querySelector('.auniocall__answer')
+    this.image = this.DOM.querySelector('.answer__img')
+    if(this.image) {
+      this.image.src = `${baseURL}${this.wordData.image}`
+    }
+    this.text = this.DOM.querySelector('.answer__word')
 
     this.audioButton = this.DOM.querySelector('.question__audio') as HTMLButtonElement
     this.audioButton.addEventListener('click', () => {
@@ -41,6 +53,31 @@ export class AudioCallQuestion {
     Array.from(this.answersButtons.children)[this.answerPosition].textContent = this.wordData.wordTranslate
 
     console.log(this.audio)
+
+    this.answersButtons.addEventListener('click', (e: Event) => {
+      const target = (e.target as HTMLButtonElement)
+      if (target.classList.contains('question__answer')) {
+        console.log(target.value)
+        this.audio.play()
+        this.answerContainer?.classList.remove('hidden')
+
+        if (this.text) {
+          this.text.textContent = `${this.wordData.word} ${this.wordData.transcription}`
+        }
+
+        const answerEvent = new Event('answer')
+        document.dispatchEvent(answerEvent)
+
+        if(+target.value === this.answerPosition) {
+          this.isCorrect = true
+          target.classList.add('question__answer_correct')
+        } else {
+          this.isCorrect = false
+          target.classList.add('question__answer_incorrect')
+          Array.from(this.answersButtons.children)[this.answerPosition].classList.add('question__answer_correct')
+        }
+      }
+    })
   }
 
   playAudio() {
