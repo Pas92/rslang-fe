@@ -159,7 +159,7 @@ export class WordCard {
     if(!this.isDifficult) {
       this.isDifficult = true
       this.isStudied = false
-      changeWordStatus(this.wordData._id, `hard`)
+      await changeWordStatus(this.wordData._id, `hard`)
       this.DOM.classList.add('difficult');
       this.DOM.classList.remove('studied');
       (ev.target as HTMLButtonElement).textContent = 'Удалить из сложных слов'
@@ -168,7 +168,7 @@ export class WordCard {
       hardButton.textContent = 'Пометить как изученное';
     } else {
       this.isDifficult = false
-      changeWordStatus(this.wordData._id, `normal`)
+      await changeWordStatus(this.wordData._id, `normal`)
       this.DOM.classList.remove('difficult');
       (ev.target as HTMLButtonElement).textContent = 'Добавить в сложные слова'
       if (this.DOM.parentElement?.classList.contains('ebook_difficult')) {
@@ -183,7 +183,7 @@ export class WordCard {
       this.isStudied = true
       this.isDifficult = false
       console.log(this.wordData)
-      changeWordStatus(this.wordData._id, `studied`)
+      await changeWordStatus(this.wordData._id, `studied`)
       this.DOM.classList.add('studied');
       this.DOM.classList.remove('difficult');
       (ev.target as HTMLButtonElement).textContent = 'Пометить как неизученное'
@@ -192,7 +192,7 @@ export class WordCard {
       hardButton.textContent = 'Добавить в сложные слова';
     } else {
       this.isStudied = false
-      changeWordStatus(this.wordData._id, `normal`)
+      await changeWordStatus(this.wordData._id, `normal`)
       console.log(this.wordData)
       this.DOM.classList.remove('studied');
       (ev.target as HTMLButtonElement).textContent = 'Пометить как изученное';

@@ -92,7 +92,7 @@ const insertHardWords = async (ev: Event) => {
 
   if (ebookControls?.classList.contains('ebook_difficult')) {
     ebookControls.classList.remove('ebook_difficult');
-    ebookPage?.classList.add('ebook_difficult');
+    ebookPage?.classList.remove('ebook_difficult');
     (ev.target as HTMLButtonElement).textContent = 'Cложные слова'
     getWordCards(group, page)
   } else {
