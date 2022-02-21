@@ -46,6 +46,9 @@ export class AudioCallGame {
 
         const report = new GameReport(correctAnswers, wrongAnswers)
         this.DOM?.prepend(report.insert())
+
+        const event = new Event('audiocall-game-over')
+        document.dispatchEvent(event)
         console.log('Game over')
       } else {
         this.currentQuestion = this.questions[this.currentQuestionPosition]

@@ -20,6 +20,10 @@ gameCategories?.addEventListener('click', async (ev) => {
     wordsForGame = await getWordsForGame(+evTarget.value)
   }
 
+  gameCategories.classList.add('hidden')
   const game = new AudioCallGame(wordsForGame, gameContainer)
   game.start()
+  document.addEventListener('audiocall-game-over', () => {
+    gameCategories.classList.remove('hidden')
+  })
 })
