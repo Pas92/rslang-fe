@@ -1,17 +1,42 @@
 .header__nav {
+  margin: 16px auto;
   ul {
+    margin: 0 auto;
     display: flex;
+    justify-content: center;
     column-gap: 24px;
-    font-size: 16px;
+    font-size: 20px;
     text-transform: uppercase;
 
     a {
+      color: #111111;
+      text-decoration: none;
+
       &:visited {
-        color: rgb(255, 247, 221);
+        color: #111111;
+        text-decoration: none;
       }
 
       &:hover {
+        text-decoration: underline;
         color: #3daa69;
+      }
+
+      &:focus {
+        outline: none;
+      }
+    }
+    
+
+    li {
+      &:active {
+        transform: scale(1.2);
+      }
+
+      &.active {
+        .header__link {
+          color: #e44225;
+        }
       }
     }
   }
