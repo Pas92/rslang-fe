@@ -188,6 +188,10 @@ export class WordCard {
       this.DOM.classList.remove('difficult');
       (ev.target as HTMLButtonElement).textContent = 'Пометить как неизученное'
 
+      if (this.DOM.parentElement?.classList.contains('ebook_difficult')) {
+        this.delete()
+      }
+
       const hardButton = this.DOM.querySelector('.word__hard-button') as HTMLButtonElement;
       hardButton.textContent = 'Добавить в сложные слова';
     } else {
@@ -196,9 +200,7 @@ export class WordCard {
       console.log(this.wordData)
       this.DOM.classList.remove('studied');
       (ev.target as HTMLButtonElement).textContent = 'Пометить как изученное';
-      if (this.DOM.parentElement?.classList.contains('ebook_difficult')) {
-        this.delete()
-      }
+
       // console.log(`TODO - delete from difficult words`)
     }
   }
