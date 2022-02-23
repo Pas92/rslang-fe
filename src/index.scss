@@ -1,0 +1,27 @@
+:root {
+  font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+}
+
+.app-main {
+  min-height: calc(100% - 36px);
+  height: calc(100% - 36px);
+  width: 100%;
+  margin: 12px auto;
+}
+.page {
+  min-height: 100%;
+  height: 100%;
+  margin: auto;
+  width: 100%;
+  max-width: 1356px;
+  text-align: center;
+
+  &.page_hidden-page {
+    display: none;
+  }
+
+  .page__header {
+    margin-bottom: 24px;
+    font-size: 28px;
+  }
+}
